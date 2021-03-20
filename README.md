@@ -1,1 +1,1 @@
-# mycity-resturants
+# mycity-restaurants
