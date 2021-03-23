@@ -14,23 +14,25 @@ print(contents)
 
 # Pull data for city - resturant from yelp
 
-headers = {"Authorization": "Bearer " + contents}
-query = {'term':'food', 'location':city, 'limit': 50}
-response = requests.get("https://api.yelp.com/v3/businesses/search", params=query, headers=headers)
-# print(response.json())
+data_pull = 1
 
-x = response.json()
-# y = json.loads(x)
-places = x['businesses']
+offset = 0
 
-count = 0
+while data_pull <= 2:
+    print('Data Pull:'+str(data_pull))
+    headers = {"Authorization": "Bearer " + contents}
+    params = {'term':'food', 'location':city, 'limit': 50, 'offset': offset}
+    response = requests.get("https://api.yelp.com/v3/businesses/search", params=params, headers=headers)
+    # print(response.json())
 
+    responseData = response.json()
+    places = responseData['businesses']    
 
+    for place in places:
+        offset += 1
+        print(place['name'] + ' Is Closed: ' +str(place['is_closed' ]) + ' Rating: ' + str(place['rating']) +': ' + str(offset))
 
-for place in places:
-  count += 1
-  print(place['name'] + ' Is Closed: ' +str(place['is_closed' ]) + ' Rating: ' + str(place['rating']) +': ' + str(count))
-
-
-
-# Store in database
+    
+    
+    data_pull += 1
+print ('Execution finished')
