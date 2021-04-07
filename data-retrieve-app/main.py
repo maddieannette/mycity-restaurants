@@ -26,6 +26,7 @@ print(contents)
 data_pull = 1
 
 offset = 0
+results_list = []
 
 while data_pull <= 2:
     print('Data Pull:'+str(data_pull))
@@ -38,9 +39,15 @@ while data_pull <= 2:
     places = responseData['businesses']    
 
     for place in places:
+        results_list.append(place['name'])
+        results_list.append(place['rating'])
+        # results_list.append(place['numOfReviews'])
+        # results_list.append(place['longitude'])
+        # results_list.append(place['latitude'])
         offset += 1
         print(place['name'] + ' Is Closed: ' +str(place['is_closed' ]) + ' Rating: ' + str(place['rating']) +': ' + str(offset))
-
+        print(results_list)
+        
     
     
     data_pull += 1
