@@ -1,21 +1,25 @@
 import sqlite3
 from sqlite3 import Error
 import os
+import main
 
 db_file = os.getcwd() + "/data-retrieve-app/sqlite.db"
 conn = sqlite3.connect('sqlite.db')
 c = conn.cursor()
 
-# c.execute("""CREATE TABLE restaurants(
-#             name TEXT,
-#             rating INT,
-#             numOfReviews INT,
-#             longitude REAL, 
-#             latitude REAL
-#             )""")
+
+
+c.execute("""CREATE TABLE IF NOT EXISTS restaurants(
+            name TEXT,
+            rating REAL,
+            is_closed INT,
+            review_count INT,
+            longitude REAL, 
+            latitude REAL
+            )""")
 # c.execute("INSERT INTO restaurants VALUES ('Red Lion Pub', '4.3', 267, 34.55353, 23423423)")
-c.execute("SELECT * FROM restaurants WHERE name='Red Lion Pub'")
-print(c.fetchone())
+c.execute("SELECT * FROM restaurants")
+print(c.fetchall())
 
 conn.commit()
 conn.close()

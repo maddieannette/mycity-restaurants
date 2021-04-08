@@ -5,7 +5,9 @@ import sqlite3
 from sqlite3 import Error
 from place import Place
 
-
+# conn = sqlite3.connect('test.db')
+# c = conn.cursor()
+# c.exectue()
 
 
 # Step One: Identify city to use 
@@ -28,7 +30,7 @@ call = 1
 # review_count = 0
 
 
-while data_pull <= 20 and keep_going:
+while data_pull <= 2 and keep_going:
     keep_going = False
     call += 1
     print('Data Pull:'+str(data_pull))
