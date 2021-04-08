@@ -7,9 +7,6 @@ from place import Place
 
 
 
-p = Place()
-p.name = 'BKK'
-print(p.name)
 
 # Step One: Identify city to use 
 city = 'Corpus Christi, Texas'
@@ -26,29 +23,30 @@ print(contents)
 data_pull = 1
 
 offset = 0
-results_list = []
+keep_going = True
+call = 1
+# review_count = 0
 
-while data_pull <= 2:
+
+while data_pull <= 20 and keep_going:
+    keep_going = False
+    call += 1
     print('Data Pull:'+str(data_pull))
     headers = {"Authorization": "Bearer " + contents}
-    params = {'term':'food', 'location':city, 'limit': 50, 'offset': offset}
+    params = {'term':'food', 'location':city, 'limit': 50, 'offset': offset, 'sort_by': 'review_count'}
     response = requests.get("https://api.yelp.com/v3/businesses/search", params=params, headers=headers)
     # print(response.json())
 
     responseData = response.json()
     places = responseData['businesses']    
+    print(len(places))
 
     for place in places:
-        results_list.append(place['name'])
-        results_list.append(place['rating'])
-        # results_list.append(place['numOfReviews'])
-        # results_list.append(place['longitude'])
-        # results_list.append(place['latitude'])
+        keep_going = True
         offset += 1
-        print(place['name'] + ' Is Closed: ' +str(place['is_closed' ]) + ' Rating: ' + str(place['rating']) +': ' + str(offset))
-        print(results_list)
-        
+        print(place['name'] + ' Is Closed: ' +str(place['is_closed' ]) + ' Rating: ' + str(place['rating']) + 'Review Count:' +  str(place['review_count']) + ': ' + str(offset))
     
+
     
     data_pull += 1
 
@@ -70,23 +68,3 @@ finally:
 print ('Execution finished')
 
 
-
-# # Python3 code here creating class
-# class geeks: 
-#     def __init__(self, name, roll): 
-#         self.name = name 
-#         self.roll = roll
-   
-# # creating list       
-# list = [] 
-  
-# # appending instances to list 
-# list.append( geeks('Akash', 2) )
-# list.append( geeks('Deependra', 40) )
-# list.append( geeks('Reaper', 44) )
-  
-# for obj in list:
-#     print( obj.name, obj.roll, sep =' ' )
-  
-# # We can also access instances attributes
-# # as list[0].name, list[0].roll and so on.
