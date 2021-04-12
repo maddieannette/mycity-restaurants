@@ -4,11 +4,20 @@ import json
 import sqlite3
 from sqlite3 import Error
 from place import Place
+import time
+import datetime
+import random
+
+unix = int(time.time())
+date = str(datetime.datetime.fromtimestamp(unix).strftime('''%Y-%m-%d %H:%M:%S'''))
 
 # conn = sqlite3.connect('test.db')
 # c = conn.cursor()
 # c.exectue()
 
+db_file = os.getcwd() + "/data-retrieve-app/sqlite.db"
+conn = sqlite3.connect('sqlite.db')
+c = conn.cursor()
 
 # Step One: Identify city to use 
 city = 'Corpus Christi, Texas'
@@ -30,6 +39,7 @@ call = 1
 # review_count = 0
 
 
+
 while data_pull <= 2 and keep_going:
     keep_going = False
     call += 1
@@ -46,25 +56,44 @@ while data_pull <= 2 and keep_going:
     for place in places:
         keep_going = True
         offset += 1
-        print(place['name'] + ' Is Closed: ' +str(place['is_closed' ]) + ' Rating: ' + str(place['rating']) + 'Review Count:' +  str(place['review_count']) + ': ' + str(offset))
-    
-
-    
+        print(place['name']
+        + ' Is Closed: '
+        +str(place['is_closed' ])
+        + ' Rating: '
+        + str(place['rating'])
+        + ' Review Count: '
+        +  str(place['review_count'])
+        + ' Longitude:'
+        + str(place['coordinates']['longitude']) 
+        + ' Latitude:'
+        + str(place['coordinates']['latitude'] )
+        + ' Offset: '
+        + str(offset))
+        c.execute('''INSERT INTO restaurants(name, rating, is_closed, review_count, longitude, latitude) VALUES(?, ?, ?, ?, ?, ?)''', (place['name'], place['rating'], place['is_closed'], place['review_count'], place['coordinates']['longitude'], place['coordinates']['latitude']))
     data_pull += 1
 
 
+c.execute("SELECT * FROM restaurants")
+print(c.fetchall())
+conn.commit()
+conn.close()
+    
+   
+    
 
 
-db_file = os.getcwd() + "/data-retrieve-app/sqlite.db"
-conn = None
-try:
-    conn = sqlite3.connect(db_file)
-    print(sqlite3.version)
-except Error as e:
-    print(e)
-finally:
-    if conn:
-        conn.close()
+
+
+# db_file = os.getcwd() + "/data-retrieve-app/sqlite.db"
+# conn = None
+# try:
+#     conn = sqlite3.connect(db_file)
+#     print(sqlite3.version)
+# except Error as e:
+#     print(e)
+# finally:
+#     if conn:
+#         conn.close()
 
 
 print ('Execution finished')
