@@ -4,6 +4,8 @@ import os
 import main
 from main import Place
 from main import data_pull
+import datetime
+import time
 
 db_file = os.getcwd() + "/data-retrieve-app/sqlite.db"
 conn = sqlite3.connect('sqlite.db')
@@ -19,20 +21,20 @@ latitude = 0
 
 # c.execute('''DROP TABLE restaurants''')
 
-c.execute("""CREATE TABLE IF NOT EXISTS restaurants(
-            name TEXT,
-            rating REAL,
-            is_closed INT,
-            review_count INT,
-            longitude REAL, 
-            latitude REAL
-            timestamp DATETIME DEFAULT CURRENT_TIMESTAMP
-            )""")
-# c.execute('''INSERT INTO restaurants(name, rating, is_closed, review_count, longitude, latitude) VALUES(?, ?, ?, ?, ?, ?)''', (name, rating, is_closed, review_count, longitude, latitude))
+# c.execute("""CREATE TABLE IF NOT EXISTS restaurants(
+#             name TEXT,
+#             rating REAL,
+#             is_closed INT,
+#             review_count INT,
+#             longitude REAL, 
+#             latitude REAL,
+#             time DATETIME DEFAULT CURRENT_TIMESTAMP
+#             )""")
+# # c.execute('''INSERT INTO restaurants(name, rating, is_closed, review_count, longitude, latitude) VALUES(?, ?, ?, ?, ?, ?)''', (name, rating, is_closed, review_count, longitude, latitude))
 # c.execute("SELECT * FROM restaurants")
 
 
-# print(c.fetchall())
+print(c.fetchall())
 
-# conn.commit()
-# conn.close()
+conn.commit()
+conn.close()

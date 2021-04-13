@@ -4,12 +4,7 @@ import json
 import sqlite3
 from sqlite3 import Error
 from place import Place
-import time
-import datetime
 import random
-
-unix = int(time.time())
-date = str(datetime.datetime.fromtimestamp(unix).strftime('''%Y-%m-%d %H:%M:%S'''))
 
 # conn = sqlite3.connect('test.db')
 # c = conn.cursor()
@@ -40,7 +35,7 @@ call = 1
 
 
 
-while data_pull <= 2 and keep_going:
+while data_pull <= 20 and keep_going:
     keep_going = False
     call += 1
     print('Data Pull:'+str(data_pull))
@@ -69,6 +64,14 @@ while data_pull <= 2 and keep_going:
         + str(place['coordinates']['latitude'] )
         + ' Offset: '
         + str(offset))
+        c.execute('''CREATE TABLE IF NOT EXISTS restaurants(
+            name TEXT,
+            rating REAL,
+            is_closed INT,
+            review_count INT,
+            longitude REAL, 
+            latitude REAL
+            )''')
         c.execute('''INSERT INTO restaurants(name, rating, is_closed, review_count, longitude, latitude) VALUES(?, ?, ?, ?, ?, ?)''', (place['name'], place['rating'], place['is_closed'], place['review_count'], place['coordinates']['longitude'], place['coordinates']['latitude']))
     data_pull += 1
 
@@ -78,22 +81,6 @@ print(c.fetchall())
 conn.commit()
 conn.close()
     
-   
-    
-
-
-
-
-# db_file = os.getcwd() + "/data-retrieve-app/sqlite.db"
-# conn = None
-# try:
-#     conn = sqlite3.connect(db_file)
-#     print(sqlite3.version)
-# except Error as e:
-#     print(e)
-# finally:
-#     if conn:
-#         conn.close()
 
 
 print ('Execution finished')
