@@ -34,8 +34,7 @@ call = 1
 # review_count = 0
 
 
-
-while data_pull <= 20 and keep_going:
+while data_pull <= 2 and keep_going:
     keep_going = False
     call += 1
     print('Data Pull:'+str(data_pull))
@@ -64,18 +63,19 @@ while data_pull <= 20 and keep_going:
         + str(place['coordinates']['latitude'] )
         + ' Offset: '
         + str(offset))
-        c.execute('''CREATE TABLE IF NOT EXISTS restaurants(
-            name TEXT,
-            rating REAL,
-            is_closed INT,
-            review_count INT,
-            longitude REAL, 
-            latitude REAL
-            )''')
-        c.execute('''INSERT INTO restaurants(name, rating, is_closed, review_count, longitude, latitude) VALUES(?, ?, ?, ?, ?, ?)''', (place['name'], place['rating'], place['is_closed'], place['review_count'], place['coordinates']['longitude'], place['coordinates']['latitude']))
+        # c.execute('''CREATE TABLE IF NOT EXISTS restaurants(
+        #     name TEXT,
+        #     rating REAL,
+        #     is_closed INT,
+        #     review_count INT,
+        #     longitude REAL, 
+        #     latitude REAL,
+        #     created_at TEXT DEFAULT CURRENT_TIMESTAMP
+        #     )''')
+        c.execute('''INSERT INTO restaurants(name, rating, is_closed, review_count, longitude, latitude, created_at) VALUES(?, ?, ?, ?, ?, ?, ?)''', (place['name'], place['rating'], place['is_closed'], place['review_count'], place['coordinates']['longitude'], place['coordinates']['latitude'], created_at('now')))
     data_pull += 1
 
-
+# c.execute("DROP TABLE restaurants")
 c.execute("SELECT * FROM restaurants")
 print(c.fetchall())
 conn.commit()
