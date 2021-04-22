@@ -5,6 +5,9 @@ import sqlite3
 from sqlite3 import Error
 from place import Place
 import random
+import pandas as pd
+import pygsheets
+
 
 # conn = sqlite3.connect('test.db')
 # c = conn.cursor()
@@ -63,16 +66,16 @@ while data_pull <= 2 and keep_going:
         + str(place['coordinates']['latitude'] )
         + ' Offset: '
         + str(offset))
-        # c.execute('''CREATE TABLE IF NOT EXISTS restaurants(
-        #     name TEXT,
-        #     rating REAL,
-        #     is_closed INT,
-        #     review_count INT,
-        #     longitude REAL, 
-        #     latitude REAL,
-        #     created_at TEXT DEFAULT CURRENT_TIMESTAMP
-        #     )''')
-        c.execute('''INSERT INTO restaurants(name, rating, is_closed, review_count, longitude, latitude, created_at) VALUES(?, ?, ?, ?, ?, ?, ?)''', (place['name'], place['rating'], place['is_closed'], place['review_count'], place['coordinates']['longitude'], place['coordinates']['latitude'], created_at('now')))
+        c.execute('''CREATE TABLE IF NOT EXISTS restaurants(
+            name TEXT,
+            rating REAL,
+            is_closed INT,
+            review_count INT,
+            longitude REAL, 
+            latitude REAL,
+            created_at TEXT DEFAULT CURRENT_TIMESTAMP
+            )''')
+        c.execute('''INSERT INTO restaurants(name, rating, is_closed, review_count, longitude, latitude) VALUES(?, ?, ?, ?, ?, ?)''', (place['name'], place['rating'], place['is_closed'], place['review_count'], place['coordinates']['longitude'], place['coordinates']['latitude']))
     data_pull += 1
 
 # c.execute("DROP TABLE restaurants")
@@ -80,8 +83,14 @@ c.execute("SELECT * FROM restaurants")
 print(c.fetchall())
 conn.commit()
 conn.close()
-    
 
+df = pd.DataFrame({'name': [place['name']], 'rating': [place['rating']], 'is_closed': [place['is_closed']], 'review_count': [place['review_count']], 'longitude': [place['coordinates']['longitude']], 'latitude': [place['coordinates']['latitude']]})
+creds = os.getcwd() + "/data-retrieve-app/service_file.json"
+api = pygsheets.authorize(service_file=creds)
+wb = api.open('[Yelp Resturaunt API]')
+
+sheet = wb.worksheet_by_title(f'[test]')
+sheet.set_dataframe(df, (1,1))
 
 print ('Execution finished')
 

@@ -8,6 +8,7 @@ __pycache__/
 
 sqlite.db
 apikey.txt
+service_file.json
 
 # Distribution / packaging
 .Python
