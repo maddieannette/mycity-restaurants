@@ -87,9 +87,9 @@ conn.close()
 df = pd.DataFrame({'name': [place['name']], 'rating': [place['rating']], 'is_closed': [place['is_closed']], 'review_count': [place['review_count']], 'longitude': [place['coordinates']['longitude']], 'latitude': [place['coordinates']['latitude']]})
 creds = os.getcwd() + "/data-retrieve-app/service_file.json"
 api = pygsheets.authorize(service_file=creds)
-wb = api.open('[Yelp Resturaunt API]')
+wb = api.open('Yelp Resturaunt API')
 
-sheet = wb.worksheet_by_title(f'[test]')
+sheet = wb.worksheet_by_title(f'test')
 sheet.set_dataframe(df, (1,1))
 
 print ('Execution finished')
