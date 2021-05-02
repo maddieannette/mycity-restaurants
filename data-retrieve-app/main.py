@@ -22,8 +22,8 @@ city = 'Corpus Christi, Texas'
 #Pull Api Key from ApiKeyFile
 # apiKeyPath = os.getcwd() + "/data-retrieve-app/apikey.txt"
 
-api_folder = os.path.dirname(os.path.abspath(__file__))
-api_file = os.path.join(api_folder, 'apikey.txt')
+this_folder = os.path.dirname(os.path.abspath(__file__))
+api_file = os.path.join(this_folder, 'apikey.txt')
 myfile = open(api_file, "rt") 
 # open lorem.txt for reading text
 contents = myfile.read()         # read the entire file to string
@@ -84,7 +84,7 @@ while data_pull <= 2 and keep_going:
 
 df = pd.read_sql_query("SELECT * FROM restaurants", conn)
 conn.close()
-creds = os.getcwd() + "/data-retrieve-app/service_file.json"
+creds = os.path.join(this_folder, 'service_file.json')
 api = pygsheets.authorize(service_file=creds)
 wb = api.open('Yelp Resturaunt API')
 
@@ -92,4 +92,3 @@ sheet = wb.worksheet_by_title(f'test')
 sheet.set_dataframe(df, (1,1))
 
 print ('Execution finished')
-
