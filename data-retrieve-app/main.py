@@ -40,7 +40,7 @@ call = 1
 # review_count = 0
 
 
-while data_pull <= 2 and keep_going:
+while data_pull <= 20 and keep_going:
     keep_going = False
     call += 1
     print('Data Pull:'+str(data_pull))
@@ -81,14 +81,32 @@ while data_pull <= 2 and keep_going:
         c.execute('''INSERT INTO restaurants(name, rating, is_closed, review_count, longitude, latitude) VALUES(?, ?, ?, ?, ?, ?)''', (place['name'], place['rating'], place['is_closed'], place['review_count'], place['coordinates']['longitude'], place['coordinates']['latitude']))
     data_pull += 1
 
+conn.commit()
 
-df = pd.read_sql_query("SELECT * FROM restaurants", conn)
+df = pd.read_sql_query('''
+select with_review.* 
+from restaurants as with_review
+join (
+    select name,
+    longitude,
+    latitude,
+    max(created_at) as last_poll
+    from restaurants
+    group by name, longitude, latitude
+) as grouped_restaurants
+    on with_review.name = grouped_restaurants.name
+    and with_review.longitude = grouped_restaurants.longitude
+    and with_review.latitude = grouped_restaurants.latitude
+    and with_review.created_at = grouped_restaurants.last_poll
+'''
+, conn)
 conn.close()
 creds = os.path.join(this_folder, 'service_file.json')
 api = pygsheets.authorize(service_file=creds)
 wb = api.open('Yelp Resturaunt API')
 
-sheet = wb.worksheet_by_title(f'test')
-sheet.set_dataframe(df, (1,1))
 
+sheet = wb.worksheet_by_title(f'test')
+sheet.clear()
+sheet.set_dataframe(df, (1,1))
 print ('Execution finished')
