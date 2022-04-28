@@ -1,1 +1,2 @@
 # mycity-restaurants
+The Yelp Fusion API was used to obtain the data of 1000 restaurants in Corpus Christi, Texas, and surrounding regions. Once the data was extracted from Yelp, it was then stored in an SQLite database. Google sheets allowed for the data to be updated automatically using a task scheduler on the server. Tableau public was then connected to the existing google sheet, and a dashboard was created.
